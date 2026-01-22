@@ -1,0 +1,17 @@
+# Download latest qiime2 version from : https://docs.qimme2.org/2018.11/install/native/
+
+source activate qiime2-2021.11
+
+# Import fastq into qiime
+
+qimme tools import --type 
+'SampleData[pairedEndSequencesWithQuality]' --input-path fastq -- 
+input-format CasavaOneEightSingleLanePerSampleDirFmt --output-path
+demux-paired-end.qza
+
+#Find primers and remove with cutadapt
+
+qiime cutadapt trim-paired --i-demultiplexed-sequences demux-paired-end.qza --p-adapter-f '^PRIMERSEQUENCE'
+--p-adapter-r '^PRIMERSEQUENCE' --p-
+cores 2 --o-trimmed-sequences trimmed-seqs.qza --p-discard-
+untrimmed --p-overlap 10 --p-minimum-length 50 --verbose --p-error-rate 0.13
